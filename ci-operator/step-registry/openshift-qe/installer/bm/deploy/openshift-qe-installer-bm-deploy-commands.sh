@@ -58,21 +58,21 @@ podman rm $(podman ps -aq)          || echo 'No podman containers to delete'
 rm -rf /opt/*
 EOF
 
+repo=/tmp/jetlag-${LAB}-${LAB_CLOUD}-$(date +%s)
+
 # Setup Bastion
 sshpass -p "$(cat /secret/login)" ssh -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null root@${bastion} "
    set -e
    set -o pipefail
-   cd jetlag
-   if [[ -n '$JETLAG_PR' ]]; then
-     git checkout main
-     git branch -D dev || echo 'No dev branch exists'
-     git fetch origin pull/$JETLAG_PR/head:dev
-     git checkout dev
-   elif [[ ${JETLAG_LATEST} == 'true' ]]; then
-     git checkout main
-     git pull
-   else
-     git pull origin $JETLAG_BRANCH
+   rm -rf jetlag
+   repo=${repo}
+   git clone https://github.com/redhat-performance/jetlag.git --depth=1 --branch=${JETLAG_BRANCH:-main} ${repo}
+   cd ${repo}
+   # JETLAG_PR or PULL_NUMBER can't be set at the same time
+   if [[ -n ${JETLAG_PR} ]] || [[ -n ${PULL_NUMBER} ]]; then
+     PR_NUMBER=${JETLAG_PR}${PULL_NUMBER}
+     git pull origin pull/${PR_NUMBER}/head:${PR_NUMBER} --rebase
+     git switch ${PR_NUMBER}
    fi
    git branch
    source bootstrap.sh
@@ -84,7 +84,7 @@ sshpass -p "$(cat /secret/login)" ssh -oStrictHostKeyChecking=no -oUserKnownHost
 sshpass -p "$(cat /secret/login)" ssh -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null root@${bastion} "
    set -e
    set -o pipefail
-   cd jetlag
+   cd ${repo}
    git branch
    source bootstrap.sh
    ansible-playbook -i ansible/inventory/$LAB_CLOUD.local ansible/${TYPE}-deploy.yml -v | tee /tmp/ansible-${TYPE}-deploy-$(date +%s)"

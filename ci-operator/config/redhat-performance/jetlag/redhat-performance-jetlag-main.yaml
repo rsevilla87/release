@@ -31,6 +31,7 @@ tests:
       LAB_CLOUD: cloud19
       NUM_WORKER_NODES: "2"
       OCP_VERSION: latest-4.17
+      JETLAG_CI: true
     test:
     - chain: openshift-qe-installer-bm-ping
     - chain: openshift-qe-installer-bm-deploy
