@@ -25,9 +25,6 @@ git clone $REPO_URL $TAG_OPTION --depth 1
 pushd svt/storage-csi-perf
 
 export ES_SERVER="https://$ES_USERNAME:$ES_PASSWORD@$ES_HOST"
-ls /secret/ga-gsheet
-GSHEET_KEY_LOCATION="/secret/ga-gsheet/gcp-sa-account"
-export GSHEET_KEY_LOCATION
 
 sa_email=$(jq -r .client_email ${GSHEET_KEY_LOCATION})
 echo "$sa_email"

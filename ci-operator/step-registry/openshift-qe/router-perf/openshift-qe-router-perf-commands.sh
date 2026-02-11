@@ -13,8 +13,6 @@ source ./venv_qe/bin/activate
 
 ES_PASSWORD=$(cat "/secret/password")
 ES_USERNAME=$(cat "/secret/username")
-GSHEET_KEY_LOCATION="/ga-gsheet/gcp-sa-account"
-export GSHEET_KEY_LOCATION
 
 REPO_URL="https://github.com/cloud-bulldozer/e2e-benchmarking";
 LATEST_TAG=$(curl -s "https://api.github.com/repos/cloud-bulldozer/e2e-benchmarking/releases/latest" | jq -r '.tag_name');

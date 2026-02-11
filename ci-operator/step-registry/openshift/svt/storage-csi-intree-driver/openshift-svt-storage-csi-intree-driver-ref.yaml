@@ -59,8 +59,6 @@ ref:
     name: ocp-qe-perfscale-es
     mount_path: /secret/perfscale-es
   - namespace: test-credentials # this entry injects the custom credential
-    name: ocp-qe-gcp-sa
-    mount_path: /secret/ga-gsheet      
   resources:
     requests:
       cpu: 100m

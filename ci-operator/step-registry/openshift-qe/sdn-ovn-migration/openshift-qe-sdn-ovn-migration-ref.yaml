@@ -12,8 +12,6 @@ ref:
     name: ocp-qe-perfscale-es
     mount_path: /secret
   - namespace: test-credentials
-    name: ocp-qe-gcp-sa
-    mount_path: /ga-gsheet
   env:
   - name: ITERATIONS
     default: "3"
